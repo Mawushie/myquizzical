@@ -20,7 +20,7 @@ export default function CategorySelect({ getCategoryId }) {
   };
   return (
     <div className="flex flex-col">
-      <label className="karla text-xl sm:text-2xl mb-2">
+      <label className="karla text-xl sm:text-2xl mb-2 self-center">
         Choose a Category
       </label>
       <select

@@ -5,6 +5,8 @@ export default {
     extend: {
       colors: {
         btn: "#4D5B9E",
+        myborder: "#293264",
+        mybg: "#D6DBF5",
       },
     },
   },

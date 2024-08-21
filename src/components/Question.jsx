@@ -1,22 +1,16 @@
 import React from "react";
 import he from "he";
-export default function Question({ quiz, getSelectedAnswer }) {
-  const { question, allAnswers, correct_answer } = quiz;
-  // console.log(quiz);
-  const shuffleArray = (array) => {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-  };
-  let randomizedAnswers = shuffleArray(allAnswers);
-  const answerElements = randomizedAnswers.map((answer, index) => {
+export default function Question({ quiz, handleSelectedAnswer }) {
+  // console.log(selectedAnswer);
+  const { question, allAnswers, correct_answer, id, selectedAnswer } = quiz;
+
+  const answerElements = allAnswers.map((answer, index) => {
     return (
       <p
-        className="border border-myborder text-myborder rounded-lg py-1 px-4 text-base font-bold cursor-pointer"
+        className={`border border-myborder text-myborder rounded-lg py-1 px-4 text-base  font-bold cursor-pointer 
+        ${selectedAnswer === he.decode(answer) ? "bg-mybg border-none" : ""}`}
         key={index}
-        onClick={() => getSelectedAnswer(he.decode(answer), correct_answer)}
+        onClick={() => handleSelectedAnswer(he.decode(answer), id)}
       >
         {he.decode(answer)}
       </p>

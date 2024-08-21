@@ -2,19 +2,39 @@ import React, { useEffect, useState } from "react";
 import Question from "./Question";
 import he from "he";
 import { ThreeDots } from "react-loader-spinner";
+import { nanoid } from "nanoid";
 
 export default function Quiz({ toggleStart, categoryId }) {
   const [quizData, setQuizData] = useState([]);
-  const [selectedAnswer, setSelectedAnswer] = useState("");
   const [iSloading, setIsLoading] = useState(false);
-  // console.log(categoryId);
+
   // if (categoryId === " ") {
   //   console.log("any category was selected");
   // }
 
-  const getSelectedAnswer = (selectedAnswer, correctAnswer) => {
+  const shuffleArray = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  };
+
+  const handleSelectedAnswer = (selectedAnswer, id) => {
     console.log(selectedAnswer);
-    console.log(correctAnswer);
+    console.log(id);
+    setQuizData((prev) =>
+      prev.map((quiz) => {
+        if (quiz.id === id) {
+          return {
+            ...quiz,
+            selectedAnswer: selectedAnswer,
+          };
+        } else {
+          return quiz;
+        }
+      })
+    );
   };
 
   useEffect(() => {
@@ -34,18 +54,22 @@ export default function Quiz({ toggleStart, categoryId }) {
         return res.json();
       })
       .then((data) => {
-        console.log(data.results);
+        // console.log(data.results);
         let quizArray = data.results.map((quiz) => {
           const { question, incorrect_answers, correct_answer } = quiz;
+          let answers = [...incorrect_answers, correct_answer];
+          let shuffledAnswers = shuffleArray(answers);
           return {
             question: he.decode(question),
-            allAnswers: [...incorrect_answers, correct_answer],
+            allAnswers: shuffledAnswers,
             correct_answer: correct_answer,
+            selectedAnswer: "",
+            id: nanoid(),
           };
         });
         setQuizData(quizArray);
         setIsLoading(false);
-        console.log(quizArray);
+        // console.log(quizArray);
       })
       .catch((err) => {
         console.log(err);
@@ -53,9 +77,13 @@ export default function Quiz({ toggleStart, categoryId }) {
       });
   }, []);
 
-  const quizDisplayElements = quizData.map((quiz, index) => {
+  const quizDisplayElements = quizData.map((quiz) => {
     return (
-      <Question quiz={quiz} key={index} getSelectedAnswer={getSelectedAnswer} />
+      <Question
+        quiz={quiz}
+        key={quiz.id}
+        handleSelectedAnswer={handleSelectedAnswer}
+      />
     );
   });
   return (

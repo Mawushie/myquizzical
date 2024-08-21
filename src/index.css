@@ -3,7 +3,7 @@
 @tailwind utilities;
 body {
     display: flex;
-    align-items: center;
+    /* align-items: center; */
     background: url("./assets/lowerblob.png"), url("./assets/upperblob.png");
     background-position: left bottom, right top;
     background-repeat: no-repeat;

@@ -27,7 +27,9 @@ export default function Question({ quiz, getSelectedAnswer }) {
       <div className="mb-3 pt-3">
         <p className="text-myborder font-bold text-lg ">{question}</p>
       </div>
-      <div className="flex gap-3 mb-3 pb-2">{answerElements}</div>
+      <div className="grid grid-cols-2 gap-3 mb-3 pb-2 sm:flex ">
+        {answerElements}
+      </div>
     </div>
   );
 }

@@ -10,7 +10,7 @@ export default function Start({ toggleStart, getCategoryId, categoryId }) {
   //   }
   //the CategorySelect will receive the props and then make use of it in itself
   return (
-    <div className="flex flex-col gap-6 items-center justify-center">
+    <div className="flex flex-col gap-6 items-center justify-center h-screen">
       <h1 className="shadows-into-light-regular font-bold text-5xl sm:text-7xl">
         Quizzical
       </h1>

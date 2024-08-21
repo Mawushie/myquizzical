@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Question from "./Question";
 import he from "he";
+import { ThreeDots } from "react-loader-spinner";
 
 export default function Quiz({ toggleStart, categoryId }) {
   const [quizData, setQuizData] = useState([]);
   const [selectedAnswer, setSelectedAnswer] = useState("");
+  const [iSloading, setIsLoading] = useState(false);
   // console.log(categoryId);
   // if (categoryId === " ") {
   //   console.log("any category was selected");
@@ -16,6 +18,7 @@ export default function Quiz({ toggleStart, categoryId }) {
   };
 
   useEffect(() => {
+    setIsLoading(true);
     let fetchUrl =
       categoryId === " "
         ? `https://opentdb.com/api.php?amount=5`
@@ -41,10 +44,12 @@ export default function Quiz({ toggleStart, categoryId }) {
           };
         });
         setQuizData(quizArray);
+        setIsLoading(false);
         console.log(quizArray);
       })
       .catch((err) => {
         console.log(err);
+        setIsLoading(false);
       });
   }, []);
 
@@ -54,11 +59,23 @@ export default function Quiz({ toggleStart, categoryId }) {
     );
   });
   return (
-    <div className="flex flex-col">
-      {quizDisplayElements}
-      <button onClick={toggleStart} className="border bg-btn text-white">
-        Play again
-      </button>
+    <div
+      className={`${
+        iSloading ? "h-screen flex justify-center items-center" : ""
+      }`}
+    >
+      {iSloading ? (
+        <div>
+          <ThreeDots color="#4D5B9E" wrapperStyle={{ display: "flex" }} />
+        </div>
+      ) : (
+        <>
+          {quizDisplayElements}
+          <button onClick={toggleStart} className="border bg-btn text-white">
+            Play again
+          </button>
+        </>
+      )}
     </div>
   );
 }

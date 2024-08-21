@@ -21,7 +21,7 @@ function App() {
   //if true, then display the Quiz page
   //Start component takes a getCategoryId prop which will be passed down to the start CategorySelect Component
   return (
-    <main className="p-3">
+    <main className="flex justify-center items-center p-3 sm:h-screen md:p-6  ">
       {startQuiz ? (
         <Quiz toggleStart={toggleStart} categoryId={categoryId} />
       ) : (

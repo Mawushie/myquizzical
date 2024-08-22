@@ -7,6 +7,9 @@ import { nanoid } from "nanoid";
 export default function Quiz({ toggleStart, categoryId }) {
   const [quizData, setQuizData] = useState([]);
   const [iSloading, setIsLoading] = useState(false);
+  const [score, setScore] = useState(0);
+  const [displayResults, setDisplayResults] = useState(false);
+  const [warning, setWarning] = useState("");
 
   // if (categoryId === " ") {
   //   console.log("any category was selected");
@@ -21,8 +24,6 @@ export default function Quiz({ toggleStart, categoryId }) {
   };
 
   const handleSelectedAnswer = (selectedAnswer, id) => {
-    console.log(selectedAnswer);
-    console.log(id);
     setQuizData((prev) =>
       prev.map((quiz) => {
         if (quiz.id === id) {
@@ -35,6 +36,28 @@ export default function Quiz({ toggleStart, categoryId }) {
         }
       })
     );
+  };
+
+  const calculateScore = () => {
+    quizData.forEach((quiz) => {
+      quiz.selectedAnswer === quiz.correctAnswer
+        ? setScore((prev) => prev + 1)
+        : "";
+    });
+  };
+
+  const checkAnswers = () => {
+    const allSelected = quizData.every((quiz) => quiz.selectedAnswer !== "");
+    if (allSelected) {
+      calculateScore();
+      setDisplayResults(true);
+      setWarning("");
+    } else {
+      setDisplayResults(false);
+      setWarning("Please select an answer for each question");
+      return;
+    }
+    console.log("check  answers called");
   };
 
   useEffect(() => {
@@ -62,7 +85,7 @@ export default function Quiz({ toggleStart, categoryId }) {
           return {
             question: he.decode(question),
             allAnswers: shuffledAnswers,
-            correct_answer: correct_answer,
+            correctAnswer: correct_answer,
             selectedAnswer: "",
             id: nanoid(),
           };
@@ -97,12 +120,31 @@ export default function Quiz({ toggleStart, categoryId }) {
           <ThreeDots color="#4D5B9E" wrapperStyle={{ display: "flex" }} />
         </div>
       ) : (
-        <>
+        <div>
           {quizDisplayElements}
-          <button onClick={toggleStart} className="border bg-btn text-white">
-            Play again
-          </button>
-        </>
+          <p className="text-center mt-2 text-red-500">{warning}</p>
+          <div className="mt-6 flex justify-center items-center gap-5">
+            {displayResults && (
+              <div className="flex justify-center items-center gap-5">
+                <p>You scored {score}/5 correct answers</p>
+                <button
+                  onClick={toggleStart}
+                  className="border none rounded-lg w-36  p-2 bg-btn text-white "
+                >
+                  Play again
+                </button>
+              </div>
+            )}
+            {!displayResults && (
+              <button
+                onClick={checkAnswers}
+                className="border none rounded-lg w-36  p-2 bg-btn text-white "
+              >
+                Check answers
+              </button>
+            )}
+          </div>
+        </div>
       )}
     </div>
   );

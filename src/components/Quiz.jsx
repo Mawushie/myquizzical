@@ -24,6 +24,7 @@ export default function Quiz({ toggleStart, categoryId }) {
   };
 
   const handleSelectedAnswer = (selectedAnswer, id) => {
+    // console.log(selectedAnswer);
     setQuizData((prev) =>
       prev.map((quiz) => {
         if (quiz.id === id) {
@@ -57,7 +58,6 @@ export default function Quiz({ toggleStart, categoryId }) {
       setWarning("Please select an answer for each question");
       return;
     }
-    console.log("check  answers called");
   };
 
   useEffect(() => {
@@ -106,6 +106,7 @@ export default function Quiz({ toggleStart, categoryId }) {
         quiz={quiz}
         key={quiz.id}
         handleSelectedAnswer={handleSelectedAnswer}
+        displayResults={displayResults}
       />
     );
   });

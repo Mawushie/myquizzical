@@ -85,7 +85,7 @@ export default function Quiz({ toggleStart, categoryId }) {
           return {
             question: he.decode(question),
             allAnswers: shuffledAnswers,
-            correctAnswer: correct_answer,
+            correctAnswer: he.decode(correct_answer),
             selectedAnswer: "",
             id: nanoid(),
           };
